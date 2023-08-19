@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/users.sql
+  - include:
+      file: liquibase/products.sql
+  - include:
+      file: liquibase/reviews.sql
+  - include:
+      file: liquibase/orders.sql
+  - include:
+      file: liquibase/order_items.sql
