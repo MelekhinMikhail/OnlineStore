@@ -5,6 +5,7 @@ import com.example.onlinestore.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,7 @@ public class UserDaoImpl implements UserDao {
         return session.get(User.class, id);
     }
 
-    @Transactional
+//    @Transactional
     @Override
     public void saveUser(User user) {
         Session session = sessionFactory.getCurrentSession();
@@ -65,5 +66,20 @@ public class UserDaoImpl implements UserDao {
         Session session = sessionFactory.getCurrentSession();
 
         session.remove(session.get(User.class, id));
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("FROM User WHERE email = :paramName");
+        query.setParameter("paramName", email);
+
+        List<User> users = query.list();
+
+        if (users == null || users.isEmpty()) {
+            return null;
+        }
+        return users.get(0);
     }
 }
