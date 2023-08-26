@@ -9,4 +9,6 @@ public interface UserService {
     void addUser(CreateUserDto dto) throws ParseException;
 
     User getAuthorizedUser();
+
+    User getUserByEmail(String email);
 }

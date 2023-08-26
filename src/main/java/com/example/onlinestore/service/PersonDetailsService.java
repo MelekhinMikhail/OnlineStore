@@ -8,16 +8,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PersonDetailsService implements UserDetailsService {
 
-    private final UserDao userDao;
+    private final UserService userService;
 
+//    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findUserByEmail(username);
+        User user = userService.getUserByEmail(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

@@ -7,11 +7,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
+@EnableTransactionManagement
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
 
@@ -33,7 +36,6 @@ public class UserDaoImpl implements UserDao {
         return session.get(User.class, id);
     }
 
-//    @Transactional
     @Override
     public void saveUser(User user) {
         Session session = sessionFactory.getCurrentSession();

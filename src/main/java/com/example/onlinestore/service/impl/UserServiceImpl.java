@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.time.Instant;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder encoder;
 
+//    @Transactional
     @Override
     public void addUser(CreateUserDto dto) throws ParseException {
         if (userDao.findUserByEmail(dto.getEmail()) != null) {
@@ -52,5 +54,11 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         return personDetails.getPerson();
+    }
+
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userDao.findUserByEmail(email);
     }
 }

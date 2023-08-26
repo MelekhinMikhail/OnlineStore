@@ -32,7 +32,6 @@ public class ProductDaoImpl implements ProductDao {
         return session.get(Product.class, id);
     }
 
-    @Transactional
     @Override
     public void saveProduct(Product product) {
         Session session = sessionFactory.getCurrentSession();
