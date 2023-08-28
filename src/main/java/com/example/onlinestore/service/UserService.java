@@ -10,5 +10,5 @@ public interface UserService {
 
     User getAuthorizedUser();
 
-    User getUserByEmail(String email);
+    User findUserByEmail(String email);
 }

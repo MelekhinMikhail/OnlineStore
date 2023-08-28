@@ -5,6 +5,7 @@ import com.example.onlinestore.dto.auth.CreateUserDto;
 import com.example.onlinestore.dto.auth.LoginDto;
 import com.example.onlinestore.dto.auth.SuccessAuthDto;
 import com.example.onlinestore.dto.user.UserDto;
+import com.example.onlinestore.entity.User;
 import com.example.onlinestore.mapper.UserMapper;
 import com.example.onlinestore.security.JWTUtil;
 import com.example.onlinestore.service.UserService;
@@ -32,7 +33,6 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final UserDao userDao;
     private final UserMapper userMapper;
 
     @PostMapping("/registration")
@@ -54,11 +54,11 @@ public class AuthController {
             throw new BadCredentialsException("");
         }
 
-        UserDto userDto = userMapper.mapToDto(userDao.findUserByEmail(dto.getEmail()));
+        User user = userService.findUserByEmail(dto.getEmail());
 
-        String token = jwtUtil.generateToken(dto.getEmail());
+        String token = jwtUtil.generateToken(user);
 
-        return ResponseEntity.ok(new SuccessAuthDto(token, userDto));
+        return ResponseEntity.ok(new SuccessAuthDto(token, userMapper.mapToDto(user)));
     }
 
     @ExceptionHandler

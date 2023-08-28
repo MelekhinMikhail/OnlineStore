@@ -5,9 +5,10 @@ import com.example.onlinestore.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -16,7 +17,6 @@ public class ProductDaoImpl implements ProductDao {
 
     private final SessionFactory sessionFactory;
 
-    @Transactional(readOnly = true)
     @Override
     public List<Product> findAllProducts() {
         Session session = sessionFactory.getCurrentSession();
@@ -24,7 +24,6 @@ public class ProductDaoImpl implements ProductDao {
         return session.createQuery("select p from Product p", Product.class).getResultList();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Product findProductById(long id) {
         Session session = sessionFactory.getCurrentSession();
@@ -39,7 +38,6 @@ public class ProductDaoImpl implements ProductDao {
         session.save(product);
     }
 
-    @Transactional
     @Override
     public void updateProduct(long id, Product updatedProduct) {
         Session session = sessionFactory.getCurrentSession();
@@ -48,19 +46,26 @@ public class ProductDaoImpl implements ProductDao {
         productToBeUpdated.setTitle(updatedProduct.getTitle());
         productToBeUpdated.setDescription(updatedProduct.getDescription());
         productToBeUpdated.setPrice(updatedProduct.getPrice());
-        productToBeUpdated.setImagePath(updatedProduct.getImagePath());
         productToBeUpdated.setQuantityInStock(updatedProduct.getQuantityInStock());
-        productToBeUpdated.setRating(updatedProduct.getRating());
-        productToBeUpdated.setDateAdded(updatedProduct.getDateAdded());
-        productToBeUpdated.setLastUpdate(updatedProduct.getLastUpdate());
-        productToBeUpdated.setOwner(updatedProduct.getOwner());
+        productToBeUpdated.setLastUpdate(Instant.now());
+
     }
 
-    @Transactional
+    @Override
+    public void updateProduct(Product product) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Transaction transaction = session.beginTransaction();
+        session.update(product);
+        transaction.commit();
+    }
+
     @Override
     public void deleteProduct(long id) {
         Session session = sessionFactory.getCurrentSession();
 
+        Transaction transaction = session.beginTransaction();
         session.remove(session.get(Product.class, id));
+        transaction.commit();
     }
 }

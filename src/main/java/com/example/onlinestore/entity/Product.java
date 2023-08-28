@@ -29,7 +29,7 @@ public class Product {
     @Column(name = "image_path")
     private String imagePath;
 
-    @Column(name = "quantity_in stock")
+    @Column(name = "quantity_in_stock")
     private int quantityInStock;
 
     @Column(name = "rating")
